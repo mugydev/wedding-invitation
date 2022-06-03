@@ -1,20 +1,33 @@
 import Head from "next/head";
 import { Image, Box } from "@chakra-ui/react";
-import { BsDot } from "react-icons/bs";
+import { BsDot, BsTelephoneOutboundFill } from "react-icons/bs";
+import { SiGooglemaps } from "react-icons/si";
 import Typewriter from "typewriter-effect";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
-
-import { EffectCoverflow, Pagination } from "swiper";
-
-import { useMemo } from "react";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const { query } = useRouter();
+  const [to, setTo] = useState("");
+  const [type, setType] = useState("");
+
+  console.log(query);
+
+  useEffect(() => {
+    setTo(query.to);
+    switch (query.type) {
+      case "1":
+        setType("гэр бүлийн ");
+        break;
+      case "2":
+        setType("хамт олоны ");
+        break;
+      case "3":
+        setType("найзуудаа ");
+        break;
+    }
+  }, [query]);
+
   return (
     <div className=" flex place-content-center flex-col">
       <Head>
@@ -22,10 +35,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Top />
-      <Invitation />
+      {to && type && <Invitation to={to} type={type} />}
+
       <Seprater />
-      <Slider />
-      {/* <Location /> */}
+      <Contact />
     </div>
   );
 }
@@ -100,7 +113,7 @@ const Top = () => {
     </div>
   );
 };
-const Invitation = () => {
+const Invitation = ({ to, type }) => {
   return (
     <div className="second ">
       <div className="relative">
@@ -124,10 +137,10 @@ const Invitation = () => {
               // })
               // .pauseFor(500)
               .typeString(
-                `<p style='font-weight: bold; font-size: "24px"'>Ч. Мөнхгэрэл таныг</p>`
+                `<p style='font-weight: bold; font-size: "24px"'>${to} таныг</p>`
               )
               .typeString(
-                "<p>гэр бүлийн хамт бидний хуримын ёслолын хүндэтгэлийн цайллагад хүрэлцэн ирэхийг урьж байна.</p>"
+                `<p>${type} хамт бидний хуримын ёслолын хүндэтгэлийн цайллагад хүрэлцэн ирэхийг урьж байна.</p>`
               )
               .pauseFor(1500)
               .deleteAll()
@@ -146,8 +159,8 @@ const Invitation = () => {
                 ` <p>
             Чулуунболдын <strong>Мөнхгэрэл</strong>
             Батхуягийн <strong>Батцэцэг</strong>
-            Охин: <strong>Маралгоо</strong>
-            Хүү: <strong>Манлай</strong>
+            Охин: <strong>М. Маралгоо</strong>
+            Хүү:<strong>М.Манлай</strong>
           </p>`
               )
               .start();
@@ -173,68 +186,37 @@ const Seprater = () => {
   );
 };
 
-const Slider = () => {
+const Contact = () => {
   return (
-    <div className="slide">
-      <Swiper
-        effect={"coverflow"}
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={"auto"}
-        coverflowEffect={{
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
-        }}
-        pagination={true}
-        modules={[EffectCoverflow, Pagination]}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <Image src="/slider/1.jpg" objectFit={"cover"} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image src="/slider/2.jpg" objectFit={"cover"} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </SwiperSlide>
-      </Swiper>
+    <div className="flex flex-col items-center font-lobster px-4 pb-10">
+      <div>Хүлээн авалт болох газар:</div>
+      <div className="text-lg font-normal">
+        Улаанбаатар, Баянзүрх дүүрэг, Энх тайваны өргөн чөлөө, Кино үйлдвэр,
+        Амар ресторан
+      </div>
+      <a href="https://www.google.com/maps/place/Amar+Hotel/@47.9121827,106.951779,3112m/data=!3m1!1e3!4m8!3m7!1s0x5d96918c82334b29:0x7bd8ecd5d4e563ee!5m2!4m1!1i2!8m2!3d47.9166211!4d106.9605482">
+        {" "}
+        <div className="bg-blue-400 px-4 py-2 rounded-md font-sans text-white flex flex-col-2 space-x-2 mt-2">
+          <SiGooglemaps className="mt-[4px]" />
+          <p>Google maps</p>
+        </div>
+      </a>
+      <div className="flex flex-col-2 space-x-4 mt-4">
+        <a
+          href={`tel:99459449}`}
+          className="bg-green-400 px-4 py-2 rounded-md font-sans text-white flex flex-col-2 space-x-2"
+        >
+          <BsTelephoneOutboundFill className="mt-[4px]" />
+          <p>Мөнхгэрэл </p>
+        </a>
+        <a
+          href={`tel:99986665}`}
+          className="bg-green-400 px-4 py-2 rounded-md font-sans text-white flex flex-col-2 space-x-2"
+        >
+          <BsTelephoneOutboundFill className="mt-[4px]" />
+          <p>Батцэцэг </p>
+        </a>
+      </div>
     </div>
-  );
-};
-
-const Location = () => {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDHhC-OwSSChkghB23aIVn_k2DWAxFmZkk",
-  });
-  const center = useMemo(() => ({ lat: 47.9164714, lng: 106.9597117 }), []);
-
-  if (!isLoaded) return <div>Loading...</div>;
-
-  return (
-    <GoogleMap zoom={10} center={center} mapContainerClassName="map-container">
-      <Marker position={center} />
-    </GoogleMap>
   );
 };
