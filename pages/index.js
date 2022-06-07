@@ -133,9 +133,7 @@ const Invitation = ({ to, type }) => {
               .pauseFor(2500)
               .typeString("Эрхэм хүндэт")
               .typeString(
-                `<p style='font-weight: bold; font-size: "30px"'>${to} ${
-                  type == 2 ? "" : "таныг"
-                }</p>`
+                `<p style='font-weight: bold; font-size: "30px"'>${to}</p>`
               )
               .typeString(
                 `<p>${type} бидний хуримын ёслолын хүндэтгэлийн цайллагад хүрэлцэн ирэхийг урьж байна.</p>`
