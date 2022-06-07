@@ -23,7 +23,7 @@ export default function Home() {
         setType("хамт олоны хамт ");
         break;
       case "3":
-        setType("найзуудаа ");
+        setType(" ");
         break;
     }
   }, [query]);
